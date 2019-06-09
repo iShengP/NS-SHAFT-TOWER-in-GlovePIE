@@ -1,0 +1,86 @@
+﻿key.Space = Wiimote1.A
+key.Enter = Wiimote1.B
+
+if var.initializer=false then
+
+  //賦值0到15之間的數，控制Wiimote上的4個LED燈亮滅
+  Wiimote.Leds=15
+  			
+  //Wiimote水平校正
+
+  var.xOffset = 0
+  var.yOffset = 0
+  var.zOffset = 0
+
+  //視角移動速度，數值越小越慢
+  var.speed =  1
+
+  //如果手不就增大值
+  var.xCutoff = 1
+  var.zCutoff = 1
+  var.WheelDeadZone=0.005
+
+  var.initializer = true
+end if
+
+//感應器控制區段
+
+//宣告x.y.zRot為傾斜感應
+var.xRot1 = (Wiimote1.RawAccX + var.xOffset)*2.633
+var.xRot2 = (Wiimote2.RawAccX + var.xOffset)*2.633
+
+
+//如果感應器X軸大於xCutoff的校正值（預設0）（搖桿右傾）
+
+if var.xRot1 > var.xCutoff then
+  var.xMoveQuantity=0.001 * var.speed * (var.xRot1 - var.xCutoff)
+  if var.xMoveQuantity>var.WheelDeadZone then
+
+    Press(Key.left)    //按下鍵盤左鍵
+
+    else
+    Release(Key.left)  //如果不是則釋放左鍵
+    Wait 13ms
+  end if
+end if
+
+
+//如果感應器X軸小於xCutoff的校正值（預設0）（搖桿左傾）
+
+if var.xRot1 < -var.xCutoff then
+  var.xMoveQuantity=0.001 * var.speed * (var.xRot1 + var.xCutoff)
+  if var.xMoveQuantity<-var.WheelDeadZone then
+
+    Press(Key.right)      //按下鍵盤右鍵
+     else
+    Release(Key.right)    //如果不是則釋放右鍵
+    Wait 13ms
+  end if
+end if
+
+/如果感應器X軸大於xCutoff的校正值
+
+if var.xRot2 > var.xCutoff then
+  var.xMoveQuantity=0.001 * var.speed * (var.xRot2 - var.xCutoff)
+  if var.xMoveQuantity>var.WheelDeadZone then
+
+    Press(Key.Z)    //按下鍵盤Z鍵
+
+    else
+    Release(Key.Z)  //如果不是則釋放Z鍵
+    Wait 13ms
+  end if
+end if
+
+//如果感應器X軸小於xCutoff的校正值
+
+if var.xRot2 < -var.xCutoff then
+  var.xMoveQuantity=0.001 * var.speed * (var.xRot2 + var.xCutoff)
+  if var.xMoveQuantity<-var.WheelDeadZone then
+
+    Press(Key.X)      //按下鍵盤X鍵
+     else
+    Release(Key.X)    //如果不是則釋放X鍵
+    Wait 13ms
+  end if
+end if
